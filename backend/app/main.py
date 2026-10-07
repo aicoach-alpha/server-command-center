@@ -14,6 +14,7 @@ import contextlib
 import json
 import logging
 import os
+import time
 from typing import Any
 
 from fastapi import FastAPI, HTTPException, Query, Request, Response, WebSocket, WebSocketDisconnect
@@ -22,7 +23,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from fastapi.staticfiles import StaticFiles
 
-from app.auth import LoginGuard, create_session, verify_password, verify_session
+from app.auth import LoginGuard, create_session, token_fingerprint, verify_password, verify_session
 from app.config import settings
 from app.services.history import RANGES
 from app.services.hub import CollectorHub
@@ -35,6 +36,29 @@ log = logging.getLogger("scc.api")
 
 hub = CollectorHub()
 login_guard = LoginGuard()
+
+# Server-side session revocation. Sessions are stateless HMAC tokens, so logout
+# records the token fingerprint here until its natural expiry: a replayed token
+# is then rejected by every REST call and by the WebSocket. Only non-reversible
+# fingerprints are kept, never the token itself.
+_revoked_sessions: dict[str, float] = {}
+
+
+def _revoke_token(token: str | None) -> None:
+    fp = token_fingerprint(token)
+    if fp:
+        _revoked_sessions[fp] = time.time() + settings.auth_session_ttl_s
+
+
+def _is_revoked(token: str | None) -> bool:
+    if not _revoked_sessions:
+        return False
+    now = time.time()
+    for fp, expiry in list(_revoked_sessions.items()):
+        if expiry <= now:
+            del _revoked_sessions[fp]
+    fp = token_fingerprint(token)
+    return bool(fp) and fp in _revoked_sessions
 
 
 def _auth_configured() -> bool:
@@ -62,6 +86,8 @@ def _request_authenticated(request: Request) -> bool:
     if not _auth_configured():
         return False
     token = request.cookies.get(settings.auth_cookie_name)
+    if _is_revoked(token):
+        return False
     return verify_session(token, settings.session_secret, settings.auth_username)
 
 
@@ -191,6 +217,7 @@ async def auth_login(payload: LoginRequest, request: Request) -> Response:
 
 @app.post("/api/auth/logout")
 async def auth_logout(request: Request) -> Response:
+    _revoke_token(request.cookies.get(settings.auth_cookie_name))
     response = JSONResponse({"authenticated": False})
     response.delete_cookie(
         settings.auth_cookie_name,
@@ -218,7 +245,7 @@ async def ws_metrics(websocket: WebSocket) -> None:
             await websocket.close(code=1013, reason="Authentication is not configured")
             return
         token = websocket.cookies.get(settings.auth_cookie_name)
-        if not verify_session(token, settings.session_secret, settings.auth_username):
+        if _is_revoked(token) or not verify_session(token, settings.session_secret, settings.auth_username):
             await websocket.close(code=4401, reason="Authentication required")
             return
     await websocket.accept()

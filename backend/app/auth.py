@@ -77,6 +77,17 @@ def verify_session(token: str | None, secret: str, expected_username: str) -> bo
         return False
 
 
+def token_fingerprint(token: str | None) -> str:
+    """Stable, non-reversible fingerprint of a session token.
+
+    Used as the key for server-side revocation so a replayed token can be
+    rejected after logout without ever storing the token itself.
+    """
+    if not token:
+        return ""
+    return hashlib.sha256(token.encode("utf-8")).hexdigest()
+
+
 @dataclass
 class LoginGuard:
     max_attempts: int = 5
