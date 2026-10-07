@@ -61,6 +61,7 @@ class CollectorHub:
         self._running = False
         self._tasks: list[asyncio.Task] = []
         self._last_slow = 0.0
+        self._last_slow_ms: float | None = None
         self._last_process_collect = 0.0
         self._last_gpu_process_collect = 0.0
         self._boot_at = time.time()

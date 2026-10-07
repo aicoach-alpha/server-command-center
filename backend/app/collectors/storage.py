@@ -18,8 +18,12 @@ SKIP_FSTYPES = {
     "cgroup2", "nsfs", "fuse.portal",
 }
 
-# Important mounts first when present. Additional real mounts are still shown.
-PINNED = ("/", "/mnt/ssd-turbo", "/mnt/data")
+# Mounts that sort first in the overview. The root filesystem is always pinned;
+# deployments can add extra important mounts via SCC_PINNED_MOUNTS (comma-separated).
+# Additional real mounts are still shown, after the pinned ones.
+PINNED: tuple[str, ...] = ("/",) + tuple(
+    m.strip() for m in os.environ.get("SCC_PINNED_MOUNTS", "").split(",") if m.strip()
+)
 
 
 class StorageCollector:

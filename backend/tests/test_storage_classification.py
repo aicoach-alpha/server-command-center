@@ -60,14 +60,26 @@ def test_storage_collector_read_only_is_warning() -> None:
 
 
 def test_storage_collector_pinned_mounts_first() -> None:
-    """Pinned mounts (/, /mnt/ssd-turbo, /mnt/data) must appear first."""
+    """Every configured pinned mount that is present must be reported as pinned."""
+    from app.collectors.storage import PINNED
+
     c = StorageCollector()
     snap = c.collect()
     pinned = snap.get("pinned", [])
-    # Pinned mounts that exist should be in the list.
-    for mount in ("/", "/mnt/ssd-turbo", "/mnt/data"):
+    for mount in PINNED:
         if any(d["mount"] == mount for d in snap["disks"]):
             assert mount in pinned
+
+
+def test_storage_collector_root_is_always_pinned() -> None:
+    """The root filesystem is a generic default and must always be pinned first."""
+    from app.collectors.storage import PINNED
+
+    assert "/" in PINNED
+    c = StorageCollector()
+    snap = c.collect()
+    if any(d["mount"] == "/" for d in snap["disks"]):
+        assert snap["disks"][0]["mount"] == "/"
 
 
 def test_external_not_configured_is_noncritical(monkeypatch) -> None:

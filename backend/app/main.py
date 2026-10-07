@@ -628,7 +628,7 @@ async def demo_snapshot() -> dict:
                     "options": "rw,relatime",
                     "read_only": False,
                     "uuid": "22222222-3333-4444-5555-666666666666",
-                    "label": "SSD_CACHE",
+                    "label": None,
                     "model": "Internal SSD",
                     "transport": "sata",
                     "rotational": False,
