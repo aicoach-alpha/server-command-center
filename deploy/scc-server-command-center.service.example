@@ -1,0 +1,14 @@
+[Unit]
+Description=Server Command Center
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/server-command-center/backend
+EnvironmentFile=%h/.config/server-command-center/auth.env
+ExecStart=%h/server-command-center/backend/.venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 18680
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

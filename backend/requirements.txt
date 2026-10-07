@@ -1,0 +1,18 @@
+# Server Command Center - backend dependencies
+# Pinned to exact versions installed in backend/.venv on 2026-10-05.
+# Install with:  backend/.venv/bin/pip install -r backend/requirements.txt
+
+fastapi==0.133.1
+uvicorn[standard]==0.41.0
+psutil==7.2.2
+pydantic==2.12.4
+
+# Test-only (dev convenience); not required at runtime.
+httpx==0.28.1
+pytest==9.0.1
+pytest-asyncio==2.0.0
+
+# NOTE: NVIDIA python bindings (pynvml / nvidia-ml-py) are intentionally NOT
+# required. GPU data comes from the `nvidia-smi` binary, which is already
+# present and verified working on this host. The app detects NVML at runtime via
+# ctypes but does not depend on it.
