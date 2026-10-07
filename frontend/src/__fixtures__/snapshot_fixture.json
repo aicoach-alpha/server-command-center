@@ -1,0 +1,342 @@
+{
+  "cpu": {
+    "percent": {
+      "value": 42.5,
+      "supported": true,
+      "unit": "%"
+    },
+    "per_core": [],
+    "cores_logical": 4,
+    "cores_physical": 2,
+    "load_average": {
+      "1m": 1.2,
+      "5m": 0.9,
+      "1m_per_core": 0.3
+    },
+    "frequency_mhz": {
+      "current": {
+        "value": 2300,
+        "supported": true,
+        "unit": "MHz"
+      },
+      "min": {
+        "value": 400,
+        "supported": true,
+        "unit": "MHz"
+      },
+      "max": {
+        "value": 3100,
+        "supported": true,
+        "unit": "MHz"
+      }
+    }
+  },
+  "memory": {
+    "ram": {
+      "percent": {
+        "value": 68.2,
+        "supported": true,
+        "unit": "%"
+      },
+      "available_bytes": 4000000000,
+      "total_bytes": 12000000000,
+      "used_bytes": 8000000000
+    },
+    "swap": {
+      "percent": {
+        "value": 25,
+        "supported": true,
+        "unit": "%"
+      },
+      "total_bytes": 8000000000,
+      "used_bytes": 2000000000,
+      "free_bytes": 6000000000
+    }
+  },
+  "gpu": {
+    "index": 0,
+    "name": "NVIDIA GPU",
+    "uuid": "GPU-TEST",
+    "driver_version": "test",
+    "persistence_mode": "Disabled",
+    "utilization": {
+      "value": 12,
+      "supported": true,
+      "unit": "%"
+    },
+    "memory": {
+      "total_bytes": 2147483648,
+      "used_bytes": 1073741824,
+      "free_bytes": 1073741824,
+      "percent": {
+        "value": 50,
+        "supported": true,
+        "unit": "%"
+      }
+    },
+    "temperature": {
+      "value": 51,
+      "supported": true,
+      "unit": "°C"
+    },
+    "power_draw": {
+      "value": null,
+      "supported": false,
+      "unit": "W"
+    },
+    "power_limit": {
+      "value": null,
+      "supported": false,
+      "unit": "W"
+    },
+    "fan_speed_pct": {
+      "value": null,
+      "supported": false,
+      "unit": "%"
+    },
+    "clocks": {
+      "graphics_mhz": {
+        "value": 900,
+        "supported": true,
+        "unit": "MHz"
+      },
+      "memory_mhz": {
+        "value": 1000,
+        "supported": true,
+        "unit": "MHz"
+      },
+      "max_graphics_mhz": {
+        "value": null,
+        "supported": false,
+        "unit": "MHz"
+      },
+      "max_memory_mhz": {
+        "value": null,
+        "supported": false,
+        "unit": "MHz"
+      }
+    },
+    "available": true
+  },
+  "temperature": {
+    "cpu": {
+      "package_c": 58,
+      "supported": true,
+      "source": "coretemp",
+      "critical_c": 100,
+      "cores": []
+    }
+  },
+  "fan": {
+    "available": true,
+    "read_only": true,
+    "fan": {
+      "state": "OFF",
+      "on": false,
+      "last_change_at": null,
+      "poll_age_seconds": 2
+    },
+    "controller": {
+      "unit": "fan-controller.service",
+      "active": true,
+      "status": "active/running"
+    },
+    "tuya": {
+      "state": "CONNECTED",
+      "secrets": {}
+    },
+    "thresholds": {
+      "on_temp_c": 70,
+      "off_temp_c": 60,
+      "min_on_seconds": 180
+    },
+    "cpu_temp": 58,
+    "automation": {
+      "mode": "AUTO"
+    }
+  },
+  "network": {
+    "active_interface": "enp4s0",
+    "lan": {
+      "interface": "enp4s0",
+      "kind": "lan",
+      "state": "up",
+      "address": "192.0.2.10",
+      "rx_bytes_per_sec": 1200,
+      "tx_bytes_per_sec": 800
+    },
+    "wifi": {
+      "interface": "wlp3s0",
+      "kind": "wifi",
+      "state": "standby",
+      "address": "192.0.2.11",
+      "rx_bytes_per_sec": 0,
+      "tx_bytes_per_sec": 0
+    }
+  },
+  "storage": {
+    "available": true,
+    "count": 3,
+    "internal_count": 2,
+    "external_count": 1,
+    "disks": [
+      {
+        "display_name": "System Disk",
+        "mount": "/",
+        "device": "/dev/sda2",
+        "parent_device": "/dev/sda",
+        "fstype": "ext4",
+        "read_only": false,
+        "uuid": "11111111-1111-1111-1111-111111111111",
+        "label": null,
+        "model": "Internal SSD 256GB",
+        "transport": "sata",
+        "rotational": false,
+        "kind": "internal",
+        "health": "warning",
+        "total_bytes": 256000000000,
+        "used_bytes": 220000000000,
+        "free_bytes": 36000000000,
+        "percent": 85.9
+      },
+      {
+        "display_name": "Cache",
+        "mount": "/mnt/cache",
+        "device": "/dev/sdb1",
+        "parent_device": "/dev/sdb",
+        "fstype": "ext4",
+        "read_only": false,
+        "uuid": "22222222-2222-2222-2222-222222222222",
+        "label": "CACHE",
+        "model": "Internal SSD 128GB",
+        "transport": "sata",
+        "rotational": false,
+        "kind": "internal",
+        "health": "healthy",
+        "total_bytes": 128000000000,
+        "used_bytes": 32000000000,
+        "free_bytes": 96000000000,
+        "percent": 25
+      },
+      {
+        "display_name": "External Storage",
+        "mount": "/mnt/data",
+        "device": "/dev/sdc1",
+        "parent_device": "/dev/sdc",
+        "fstype": "ext4",
+        "read_only": false,
+        "uuid": "33333333-3333-3333-3333-333333333333",
+        "label": null,
+        "model": "USB Storage",
+        "transport": "usb",
+        "rotational": true,
+        "kind": "external",
+        "health": "healthy",
+        "total_bytes": 2000000000000,
+        "used_bytes": 1000000000000,
+        "free_bytes": 1000000000000,
+        "percent": 50
+      }
+    ]
+  },
+  "storage_external": {
+    "available": true,
+    "name": "External Storage",
+    "health": "HEALTHY",
+    "connected": true,
+    "mounted": true,
+    "current_device": "/dev/sdc1",
+    "mountpoint": "/mnt/data",
+    "filesystem": "ext4",
+    "mount_mode": "rw,relatime",
+    "capacity_bytes": 2000000000000,
+    "used_bytes": 1000000000000,
+    "free_bytes": 1000000000000,
+    "percent_used": 50,
+    "abbreviated_uuid": "3333…3333",
+    "filesystem_uuid": "33333333-3333-3333-3333-333333333333",
+    "transport": "usb"
+  },
+  "processes": {
+    "top_cpu": [
+      {
+        "pid": 1234,
+        "display_name": "Example Service",
+        "name": "python",
+        "cpu_percent": 12.3,
+        "ram_percent": 2.5,
+        "ram_bytes": 250000000,
+        "runtime_human": "1h"
+      }
+    ],
+    "top_ram": [
+      {
+        "pid": 1234,
+        "display_name": "Example Service",
+        "name": "python",
+        "cpu_percent": 12.3,
+        "ram_percent": 2.5,
+        "ram_bytes": 250000000,
+        "runtime_human": "1h"
+      }
+    ],
+    "total_processes": 120
+  },
+  "gpu_processes": {
+    "available": true,
+    "processes": [
+      {
+        "pid": 2222,
+        "display_name": "GPU Worker",
+        "name": "worker",
+        "vram_bytes": 500000000,
+        "cpu_percent": 3.2,
+        "ram_bytes": 400000000
+      }
+    ],
+    "total": 1,
+    "per_process_utilization": {
+      "value": null,
+      "supported": false,
+      "unit": "%"
+    }
+  },
+  "services": {
+    "available": true,
+    "services": [
+      {
+        "unit": "docker.service",
+        "display_name": "Docker Engine",
+        "active_state": "active",
+        "sub_state": "running",
+        "status": "active/running",
+        "important": true
+      }
+    ],
+    "counts": {
+      "total": 1,
+      "running": 1,
+      "failed": 0
+    }
+  },
+  "containers": {
+    "available": true,
+    "containers": [],
+    "count": 0
+  },
+  "health": {
+    "status": "warning",
+    "reasons": [
+      "Disk / above 85%"
+    ],
+    "warning_count": 1,
+    "critical_count": 0
+  },
+  "meta": {
+    "host": "example-server",
+    "generated_at": 0,
+    "generated_at_iso": "2026-01-01T00:00:00Z",
+    "uptime_seconds": 3600,
+    "health_status": "warning"
+  }
+}

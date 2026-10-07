@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# Node
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+
+# Environment & secrets
+.env
+.env.*
+.env.local
+*.env
+!.env.example
+
+# Runtime data
+data/
+*.db
+*.sqlite
+*.sqlite3
+*.log
+
+# Test / coverage artifacts
+coverage/
+.coverage
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+# Build output (rebuild with frontend/npm run build)
+dist/
+
+# Host-specific discovery/runtime identity
+docs/DISCOVERY.md
+backend/data/
+
+# Local backups
+*.bak
