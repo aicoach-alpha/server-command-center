@@ -962,7 +962,7 @@ const ServicesCard: React.FC<{ data: WebSocketData | null }> = ({ data }) => {
   );
 };
 
-// --- ACASISEventLog ---
+// --- ExternalStorageEventLog ---
 
 const AcasisEventLog: React.FC<{
   events: StorageEvent[];
@@ -1263,7 +1263,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
 function App() {
   const isDemo = new URLSearchParams(window.location.search).get("demo") === "1";
-  const [auth, setAuth] = useState<AuthState>({ checked: isDemo, enabled: !isDemo, configured: false, authenticated: isDemo, username: isDemo ? "demo" : null });
+  const [auth, setAuth] = useState<AuthState>({ checked: isDemo, enabled: true, configured: false, authenticated: isDemo, username: isDemo ? "demo" : null });
   const [wsData, setWsData] = useState<WebSocketData | null>(null);
   const [wsConnected, setWsConnected] = useState(false);
   const [wsError, setWsError] = useState<string | null>(null);

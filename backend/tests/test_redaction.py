@@ -68,7 +68,7 @@ class TestRedactCmdline:
             "--port",
             "58923",
             "--model",
-            "/mnt/ssd-turbo/models/Qwen3.5-2B-Q4_K_M.gguf",
+            "/mnt/data/models/example-model.gguf",
         ]
         out = redact_cmdline(argv)
 

@@ -17,7 +17,7 @@ from app.collectors.services import (
 )
 
 # Representative two-unit output from homelab-server.
-MULTI = """MainPID=981930
+MULTI = """MainPID=4242
 NRestarts=0
 ExecMainStartTimestamp=Fri 2026-10-02 10:49:54 UTC
 MemoryCurrent=5005312
@@ -42,7 +42,7 @@ SubState=running
 ActiveEnterTimestamp=2026-10-02 03:30:11 UTC
 """
 
-SINGLE = """MainPID=981930
+SINGLE = """MainPID=4242
 NRestarts=0
 Id=cpu-fan-controller.service
 LoadState=loaded
@@ -54,7 +54,7 @@ SubState=running
 class TestParseShowProperties:
     def test_single_unit(self):
         props = parse_show_properties(SINGLE)
-        assert props["MainPID"] == "981930"
+        assert props["MainPID"] == "4242"
         assert props["Id"] == "cpu-fan-controller.service"
         assert props["ActiveState"] == "active"
 
@@ -71,7 +71,7 @@ class TestParseShowBlocks:
         docker = blocks["docker.service"]
 
         # The critical assertion: PIDs must NOT be swapped between units.
-        assert fan["MainPID"] == "981930"
+        assert fan["MainPID"] == "4242"
         assert docker["MainPID"] == "622626"
 
         assert fan["Description"] == "CPU Temperature Tuya Fan Controller"

@@ -392,7 +392,7 @@ async def demo_snapshot() -> dict:
     import time as _time
 
     now = _time.time()
-    return {
+    snap = {
         "cpu": {
             "percent": {"value": 34.8, "supported": True, "unit": "%"},
             "per_core": [
@@ -784,6 +784,71 @@ async def demo_snapshot() -> dict:
             "nvml_available": True,
         },
     }
+
+    # Deterministic time-varying telemetry: the frontend polls /api/demo a few
+    # times to populate its rolling charts, so the scalar metrics follow a smooth
+    # sinusoid (period ~24 s). Values stay reproducible for any wall-clock time
+    # and remain clearly synthetic; nothing here reflects the real host.
+    import math as _math
+
+    def _wave(base: float, amp: float, phase: float, period: float = 24.0) -> float:
+        return round(base + amp * _math.sin(2 * _math.pi * (now / period) + phase), 1)
+
+    def _gib(n: float) -> str:
+        return f"{n / 1073741824.0:.1f} GiB"
+
+    _cpu = snap["cpu"]
+    _cpu["percent"]["value"] = _wave(34.8, 12.0, 0.0)
+    for _i, _core in enumerate(_cpu.get("per_core", [])):
+        _core["value"] = _wave(34.0, 10.0, _i * 0.7)
+    _la = _cpu.get("load_average")
+    if _la:
+        _la["1m"] = round(_wave(1.24, 0.6, 0.0), 2)
+        _la["5m"] = round(_wave(0.98, 0.35, 0.5), 2)
+        _la["15m"] = round(_wave(0.76, 0.2, 1.0), 2)
+
+    _ram = snap["memory"]["ram"]
+    _ram_pct = _wave(45.6, 8.0, 1.2)
+    _ram["percent"]["value"] = _ram_pct
+    _ram["used_bytes"] = int(_ram["total_bytes"] * _ram_pct / 100.0)
+    _ram["free_bytes"] = _ram["total_bytes"] - _ram["used_bytes"]
+    _ram["human"]["used"] = _gib(_ram["used_bytes"])
+    _ram["human"]["free"] = _gib(_ram["free_bytes"])
+
+    _swap = snap["memory"]["swap"]
+    _swap_pct = _wave(15.0, 5.0, 2.0)
+    _swap["percent"]["value"] = _swap_pct
+    _swap["used_bytes"] = int(_swap["total_bytes"] * _swap_pct / 100.0)
+    _swap["free_bytes"] = _swap["total_bytes"] - _swap["used_bytes"]
+    _swap["human"]["used"] = _gib(_swap["used_bytes"])
+    _swap["human"]["free"] = _gib(_swap["free_bytes"])
+
+    _gpu = snap["gpu"]
+    _gpu["utilization"]["value"] = _wave(21.0, 14.0, 0.8)
+    _vram_pct = _wave(26.2, 6.0, 1.6)
+    _gpu["memory"]["percent"]["value"] = _vram_pct
+    _gpu["memory"]["used_bytes"] = int(_gpu["memory"]["total_bytes"] * _vram_pct / 100.0)
+    _gpu["temperature"]["value"] = _wave(49.0, 4.0, 0.4)
+
+    _temp = snap["temperature"]
+    _temp["cpu"]["package_c"] = _wave(52.0, 5.0, 0.2)
+    for _i, _core in enumerate(_temp["cpu"].get("cores", [])):
+        _core["celsius"] = _wave(52.0, 5.0, 0.2 + _i * 0.3)
+
+    _net = snap["network"]
+    _rx = _wave(8600000.0, 5200000.0, 0.0)
+    _tx = _wave(1200000.0, 800000.0, 1.1)
+    _net["lan"]["rx_bytes_per_sec"] = _rx
+    _net["lan"]["tx_bytes_per_sec"] = _tx
+    if _net.get("wifi"):
+        _net["wifi"]["rx_bytes_per_sec"] = 0.0
+        _net["wifi"]["tx_bytes_per_sec"] = 0.0
+    _net["totals"]["rx_bytes_per_sec"] = _rx
+    _net["totals"]["tx_bytes_per_sec"] = _tx
+
+    snap["fan"]["cpu_temp"] = _temp["cpu"]["package_c"]
+
+    return snap
 
 
 def _json_default(obj: Any) -> Any:

@@ -150,12 +150,12 @@ class TestHistoryBuffer:
 
 
 # Representative journal excerpt from cpu-fan-controller.service.
-JOURNAL = """2026-10-05T06:08:59+00:00 homelab-server python[981930]: 2026-10-05 06:08:59,692 WARNING CPU 71.0C >= 70.0C: turning FAN ON
-2026-10-05T06:09:01+00:00 homelab-server python[981930]: 2026-10-05 06:09:01,312 INFO FAN confirmed ON
-2026-10-05T06:10:00+00:00 homelab-server python[981930]: 2026-10-05 06:10:00,000 INFO CPU=55.0C FAN=ON
-2026-10-05T06:12:08+00:00 homelab-server python[981930]: 2026-10-05 06:12:08,709 INFO CPU 49.0C <= 60.0C: turning FAN OFF
-2026-10-05T06:12:10+00:00 homelab-server python[981930]: 2026-10-05 06:12:10,240 INFO FAN confirmed OFF
-2026-10-05T10:07:17+00:00 homelab-server python[981930]: 2026-10-05 10:07:17,596 INFO CPU=57.0C FAN=OFF
+JOURNAL = """2026-10-05T06:08:59+00:00 homelab-server python[4242]: 2026-10-05 06:08:59,692 WARNING CPU 71.0C >= 70.0C: turning FAN ON
+2026-10-05T06:09:01+00:00 homelab-server python[4242]: 2026-10-05 06:09:01,312 INFO FAN confirmed ON
+2026-10-05T06:10:00+00:00 homelab-server python[4242]: 2026-10-05 06:10:00,000 INFO CPU=55.0C FAN=ON
+2026-10-05T06:12:08+00:00 homelab-server python[4242]: 2026-10-05 06:12:08,709 INFO CPU 49.0C <= 60.0C: turning FAN OFF
+2026-10-05T06:12:10+00:00 homelab-server python[4242]: 2026-10-05 06:12:10,240 INFO FAN confirmed OFF
+2026-10-05T10:07:17+00:00 homelab-server python[4242]: 2026-10-05 10:07:17,596 INFO CPU=57.0C FAN=OFF
 """
 
 CONTROLLER_SOURCE = """
@@ -186,7 +186,7 @@ class TestFanJournalParsing:
 
     def test_detects_errors(self):
         err = JOURNAL + (
-            "2026-10-05T10:10:00+00:00 homelab-server python[981930]: "
+            "2026-10-05T10:10:00+00:00 homelab-server python[4242]: "
             "2026-10-05 10:10:00,000 ERROR Connection reset by peer\n"
         )
         assert parse_journal(err)["recent_errors"]
@@ -199,7 +199,7 @@ class TestFanJournalParsing:
     def test_never_exposes_the_local_key(self):
         """The parser must not surface credential values."""
         poisoned = JOURNAL + (
-            "2026-10-05T10:11:00+00:00 homelab-server python[981930]: "
+            "2026-10-05T10:11:00+00:00 homelab-server python[4242]: "
             "2026-10-05 10:11:00,000 ERROR auth failed key=abcdef123456789\n"
         )
         state = parse_journal(poisoned)
